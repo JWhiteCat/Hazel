@@ -1,3 +1,4 @@
+#include "hzpch.h"
 #include "Log.h"
 
 #include "spdlog/sinks/stdout_color_sinks.h" // or "../stdout_sinks.h" if no colors needed
