@@ -6,7 +6,5 @@ bin-int/
 #Files
 *.user
 Hazel.sln
-Hazel/Hazel.vcxproj
-Hazel/Hazel.vcxproj.filters
-Sandbox/Sandbox.vcxproj
-Sandbox/Sandbox.vcxproj.filters
+*.vcxproj
+*.filters
