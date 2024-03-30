@@ -8,3 +8,4 @@ bin-int/
 Hazel.sln
 *.vcxproj
 *.filters
+Sandbox/imgui_log.txt
