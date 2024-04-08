@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core.h"
+#include "Hazel/Core/Core.h"
 
 #include "Hazel/Core/Window.h"
 #include "Hazel/Core/LayerStack.h"
@@ -11,15 +11,13 @@
 
 #include "Hazel/ImGui/ImGuiLayer.h"
 
-#include "Hazel/Renderer/OrthographicCamera.h"
-
 namespace Hazel {
 
 	class Application
 	{
 	public:
 		Application();
-		virtual ~Application() = default;
+		virtual ~Application();
 
 		void Run();
 
@@ -29,6 +27,7 @@ namespace Hazel {
 		void PushOverlay(Layer* layer);
 
 		inline Window& GetWindow() { return *m_Window; }
+
 		inline static Application& Get() { return *s_Instance; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
@@ -39,11 +38,12 @@ namespace Hazel {
 		bool m_Running = true;
 		bool m_Minimized = false;
 		LayerStack m_LayerStack;
-
 		float m_LastFrameTime = 0.0f;
 	private:
 		static Application* s_Instance;
 	};
 
+	// To be defined in CLIENT
 	Application* CreateApplication();
+
 }

@@ -1,11 +1,10 @@
 #pragma once
 
-#include "hzpch.h"
 #include "Hazel/Core/Core.h"
 
 namespace Hazel {
 
-	class HAZEL_API Input
+	class Input
 	{
 	protected:
 		Input() = default;
@@ -29,5 +28,4 @@ namespace Hazel {
 	private:
 		static Scope<Input> s_Instance;
 	};
-
 }

@@ -1,5 +1,5 @@
 #include "hzpch.h"
-#include "WindowsInput.h"
+#include "Platform/Windows/WindowsInput.h"
 
 #include "Hazel/Core/Application.h"
 #include <GLFW/glfw3.h>
@@ -33,13 +33,13 @@ namespace Hazel {
 
 	float WindowsInput::GetMouseXImpl()
 	{
-		auto [x, y] = GetMousePositionImpl();
+		auto[x, y] = GetMousePositionImpl();
 		return x;
 	}
 
 	float WindowsInput::GetMouseYImpl()
 	{
-		auto [x, y] = GetMousePositionImpl();
+		auto[x, y] = GetMousePositionImpl();
 		return y;
 	}
 

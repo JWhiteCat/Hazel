@@ -1,14 +1,19 @@
 #include "hzpch.h"
-#include "OpenGLBuffer.h"
+#include "Platform/OpenGL/OpenGLBuffer.h"
 
 #include <glad/glad.h>
 
-namespace Hazel
-{
+namespace Hazel {
+
+	/////////////////////////////////////////////////////////////////////////////
+	// VertexBuffer /////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
+
 	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)
 	{
 		glCreateBuffers(1, &m_RendererID);
-		glNamedBufferData(m_RendererID, size, vertices, GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
 	}
 
 	OpenGLVertexBuffer::~OpenGLVertexBuffer()
@@ -26,11 +31,16 @@ namespace Hazel
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
+	/////////////////////////////////////////////////////////////////////////////
+	// IndexBuffer //////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////
+
 	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count)
 		: m_Count(count)
 	{
 		glCreateBuffers(1, &m_RendererID);
-		glNamedBufferData(m_RendererID, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+		glBufferData(GL_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
 	}
 
 	OpenGLIndexBuffer::~OpenGLIndexBuffer()
@@ -47,4 +57,5 @@ namespace Hazel
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
+
 }
