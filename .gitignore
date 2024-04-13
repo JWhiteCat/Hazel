@@ -10,3 +10,4 @@ Hazel.sln
 *.filters
 Sandbox/imgui_log.txt
 Sandbox/imgui.ini
+.idea/
