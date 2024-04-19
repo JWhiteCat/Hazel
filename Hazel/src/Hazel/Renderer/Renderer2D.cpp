@@ -127,7 +127,7 @@ namespace Hazel
     {
         HZ_PROFILE_FUNCTION();
 
-        uint32_t dataSize = (uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase;
+        uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase);
         s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
 
         Flush();
@@ -220,7 +220,7 @@ namespace Hazel
         {
             if (s_Data.TextureSlotIndex >= Renderer2DData::MaxTextureSlots)
                 FlushAndReset();
-            
+
             textureIndex = (float)s_Data.TextureSlotIndex;
             s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
             s_Data.TextureSlotIndex++;
@@ -294,9 +294,9 @@ namespace Hazel
         HZ_PROFILE_FUNCTION();
 
         constexpr size_t quadVertexCount = 4;
-        constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
-        constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
-        
+        constexpr glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
+        constexpr glm::vec2 textureCoords[] = {{0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f}};
+
         if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
             FlushAndReset();
 
@@ -314,7 +314,7 @@ namespace Hazel
         {
             if (s_Data.TextureSlotIndex >= Renderer2DData::MaxTextureSlots)
                 FlushAndReset();
-            
+
             textureIndex = (float)s_Data.TextureSlotIndex;
             s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
             s_Data.TextureSlotIndex++;
@@ -333,7 +333,7 @@ namespace Hazel
             s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
             s_Data.QuadVertexBufferPtr++;
         }
-        
+
         s_Data.QuadIndexCount += 6;
 
         s_Data.Stats.QuadCount++;
