@@ -27,16 +27,9 @@ namespace Hazel
 
     class Instrumentor
     {
-    private:
-        std::mutex m_Mutex;
-        InstrumentationSession* m_CurrentSession;
-        std::ofstream m_OutputStream;
-
     public:
-        Instrumentor()
-            : m_CurrentSession(nullptr)
-        {
-        }
+        Instrumentor(const Instrumentor&) = delete;
+        Instrumentor(Instrumentor&&) = delete;
 
         void BeginSession(const std::string& name, const std::string& filepath = "results.json")
         {
@@ -106,6 +99,16 @@ namespace Hazel
         }
 
     private:
+        Instrumentor()
+            : m_CurrentSession(nullptr)
+        {
+        }
+
+        ~Instrumentor()
+        {
+            EndSession();
+        }
+
         void WriteHeader()
         {
             m_OutputStream << "{\"otherData\": {},\"traceEvents\":[";
@@ -130,6 +133,10 @@ namespace Hazel
                 m_CurrentSession = nullptr;
             }
         }
+    private:
+        std::mutex m_Mutex;
+        InstrumentationSession* m_CurrentSession;
+        std::ofstream m_OutputStream;
     };
 
     class InstrumentationTimer
@@ -167,8 +174,8 @@ namespace Hazel
     };
 }
 
-namespace InstrumentorUtils {
-
+namespace InstrumentorUtils
+{
     template <size_t N>
     struct ChangeResult
     {
@@ -176,7 +183,7 @@ namespace InstrumentorUtils {
     };
 
     template <size_t N, size_t K>
-    constexpr auto CleanupOutputString(const char(&expr)[N], const char(&remove)[K])
+    constexpr auto CleanupOutputString(const char (&expr)[N], const char (&remove)[K])
     {
         ChangeResult<N> result = {};
 
@@ -185,7 +192,8 @@ namespace InstrumentorUtils {
         while (srcIndex < N)
         {
             size_t matchIndex = 0;
-            while (matchIndex < K - 1 && srcIndex + matchIndex < N - 1 && expr[srcIndex + matchIndex] == remove[matchIndex])
+            while (matchIndex < K - 1 && srcIndex + matchIndex < N - 1 && expr[srcIndex + matchIndex] == remove[
+                matchIndex])
                 matchIndex++;
             if (matchIndex == K - 1)
                 srcIndex += matchIndex;
