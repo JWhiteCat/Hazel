@@ -2,11 +2,11 @@
 
 #include "Hazel/Core/Base.h"
 
-namespace Hazel {
-
+namespace Hazel
+{
     struct FramebufferSpecification
     {
-        uint32_t Width, Height;
+        uint32_t Width = 0, Height = 0;
         // FramebufferFormat Format = 
         uint32_t Samples = 1;
 
@@ -17,7 +17,7 @@ namespace Hazel {
     {
     public:
         virtual ~Framebuffer() = default;
-        
+
         virtual void Bind() = 0;
         virtual void Unbind() = 0;
 
@@ -29,6 +29,4 @@ namespace Hazel {
 
         static Ref<Framebuffer> Create(const FramebufferSpecification& spec);
     };
-
-
 }
