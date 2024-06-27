@@ -54,6 +54,7 @@ namespace Hazel {
 			void OnUpdate(Timestep ts)
 			{
 				auto& transform = GetComponent<TransformComponent>().Transform;
+
 				float speed = 5.0f;
 
 				if (Input::IsKeyPressed(Key::A))
@@ -69,6 +70,8 @@ namespace Hazel {
 
 		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 		m_SecondCamera.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 
 	void EditorLayer::OnDetach()
@@ -170,6 +173,8 @@ namespace Hazel {
 
 			ImGui::EndMenuBar();
 		}
+
+		m_SceneHierarchyPanel.OnImGuiRender();
 
 		ImGui::Begin("Settings");
 
