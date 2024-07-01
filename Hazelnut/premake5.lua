@@ -19,12 +19,14 @@ project "Hazelnut"
 		"%{wks.location}/Hazel/src",
 		"%{wks.location}/Hazel/vendor",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.yaml_cpp}"
 	}
 
 	links
 	{
-		"Hazel"
+		"Hazel",
+		"yaml-cpp"
 	}
 
 	filter "system:windows"
