@@ -6,6 +6,12 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
+#include <shaderc/shaderc.hpp>
+#include <spirv_cross/spirv_cross.hpp>
+#include <spirv_cross/spirv_glsl.hpp>
+
+#include "Hazel/Core/Timer.h"
+
 namespace Hazel {
 
 	static GLenum ShaderTypeFromString(const std::string& type)
