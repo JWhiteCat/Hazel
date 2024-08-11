@@ -8,10 +8,10 @@
 
 class b2World;
 
-namespace Hazel {
-
+namespace Hazel
+{
     class Entity;
-    
+
     class Scene
     {
     public:
@@ -37,9 +37,16 @@ namespace Hazel {
         void DuplicateEntity(Entity entity);
 
         Entity GetPrimaryCameraEntity();
+
+        template <typename... Components>
+        auto GetAllEntitiesWith()
+        {
+            return m_Registry.view<Components...>();
+        }
     private:
-        template<typename T>
+        template <typename T>
         void OnComponentAdded(Entity entity, T& component);
+
     private:
         entt::registry m_Registry;
         uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
@@ -50,5 +57,4 @@ namespace Hazel {
         friend class SceneSerializer;
         friend class SceneHierarchyPanel;
     };
-
 }
