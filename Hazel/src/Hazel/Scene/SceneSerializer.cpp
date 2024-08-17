@@ -89,14 +89,13 @@ namespace YAML
 
 namespace Hazel
 {
-
     YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec2& v)
     {
         out << YAML::Flow;
         out << YAML::BeginSeq << v.x << v.y << YAML::EndSeq;
         return out;
     }
-    
+
     YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec3& v)
     {
         out << YAML::Flow;
@@ -115,8 +114,8 @@ namespace Hazel
     {
         switch (bodyType)
         {
-        case Rigidbody2DComponent::BodyType::Static:    return "Static";
-        case Rigidbody2DComponent::BodyType::Dynamic:   return "Dynamic";
+        case Rigidbody2DComponent::BodyType::Static: return "Static";
+        case Rigidbody2DComponent::BodyType::Dynamic: return "Dynamic";
         case Rigidbody2DComponent::BodyType::Kinematic: return "Kinematic";
         }
 
@@ -126,10 +125,10 @@ namespace Hazel
 
     static Rigidbody2DComponent::BodyType RigidBody2DBodyTypeFromString(const std::string& bodyTypeString)
     {
-        if (bodyTypeString == "Static")    return Rigidbody2DComponent::BodyType::Static;
-        if (bodyTypeString == "Dynamic")   return Rigidbody2DComponent::BodyType::Dynamic;
+        if (bodyTypeString == "Static") return Rigidbody2DComponent::BodyType::Static;
+        if (bodyTypeString == "Dynamic") return Rigidbody2DComponent::BodyType::Dynamic;
         if (bodyTypeString == "Kinematic") return Rigidbody2DComponent::BodyType::Kinematic;
-	
+
         HZ_CORE_ASSERT(false, "Unknown body type");
         return Rigidbody2DComponent::BodyType::Static;
     }
@@ -142,7 +141,7 @@ namespace Hazel
     static void SerializeEntity(YAML::Emitter& out, Entity entity)
     {
         HZ_CORE_ASSERT(entity.HasComponent<IDComponent>());
-        
+
         out << YAML::BeginMap; // Entity
         out << YAML::Key << "Entity" << YAML::Value << entity.GetUUID();
 
@@ -202,6 +201,10 @@ namespace Hazel
 
             auto& spriteRendererComponent = entity.GetComponent<SpriteRendererComponent>();
             out << YAML::Key << "Color" << YAML::Value << spriteRendererComponent.Color;
+            if (spriteRendererComponent.Texture)
+                out << YAML::Key << "TexturePath" << YAML::Value << spriteRendererComponent.Texture->GetPath();
+
+            out << YAML::Key << "TilingFactor" << YAML::Value << spriteRendererComponent.TilingFactor;
 
             out << YAML::EndMap; // SpriteRendererComponent
         }
