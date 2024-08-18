@@ -1,13 +1,19 @@
-#Directories
-.vs/
-bin/
+# Binaries
+**/bin/
 bin-int/
+Intermediates/
 
-#Files
-*.user
-Hazel.sln
-*.vcxproj
-*.filters
+# Hazel files
+*.log
+
+# Visual Studio files and folder
+.vs/
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
+**.csproj
+
 Sandbox/imgui_log.txt
 Sandbox/imgui.ini
 .idea/
