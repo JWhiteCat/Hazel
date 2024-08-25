@@ -92,6 +92,14 @@ namespace Hazel
         CameraComponent(const CameraComponent&) = default;
     };
 
+    struct ScriptComponent
+    {
+        std::string ClassName;
+
+        ScriptComponent() = default;
+        ScriptComponent(const ScriptComponent&) = default;
+    };
+
     // Forward declaration
     class ScriptableEntity;
 
