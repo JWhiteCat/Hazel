@@ -123,22 +123,22 @@ namespace Hazel
         {
             switch (type)
             {
-            case ScriptFieldType::Float:   return "Float";
-            case ScriptFieldType::Double:  return "Double";
-            case ScriptFieldType::Bool:    return "Bool";
-            case ScriptFieldType::Char:    return "Char";
-            case ScriptFieldType::Byte:    return "Byte";
-            case ScriptFieldType::Short:   return "Short";
-            case ScriptFieldType::Int:     return "Int";
-            case ScriptFieldType::Long:    return "Long";
-            case ScriptFieldType::UByte:   return "UByte";
-            case ScriptFieldType::UShort:  return "UShort";
-            case ScriptFieldType::UInt:    return "UInt";
-            case ScriptFieldType::ULong:   return "ULong";
+            case ScriptFieldType::Float: return "Float";
+            case ScriptFieldType::Double: return "Double";
+            case ScriptFieldType::Bool: return "Bool";
+            case ScriptFieldType::Char: return "Char";
+            case ScriptFieldType::Byte: return "Byte";
+            case ScriptFieldType::Short: return "Short";
+            case ScriptFieldType::Int: return "Int";
+            case ScriptFieldType::Long: return "Long";
+            case ScriptFieldType::UByte: return "UByte";
+            case ScriptFieldType::UShort: return "UShort";
+            case ScriptFieldType::UInt: return "UInt";
+            case ScriptFieldType::ULong: return "ULong";
             case ScriptFieldType::Vector2: return "Vector2";
             case ScriptFieldType::Vector3: return "Vector3";
             case ScriptFieldType::Vector4: return "Vector4";
-            case ScriptFieldType::Entity:  return "Entity";
+            case ScriptFieldType::Entity: return "Entity";
             }
             return "<Invalid>";
         }
@@ -159,8 +159,10 @@ namespace Hazel
 
         std::unordered_map<std::string, Ref<ScriptClass>> EntityClasses;
         std::unordered_map<UUID, Ref<ScriptInstance>> EntityInstances;
+        std::unordered_map<UUID, ScriptFieldMap> EntityScriptFields;
 
         // Runtime
+
         Scene* SceneContext = nullptr;
     };
 
@@ -286,8 +288,19 @@ namespace Hazel
         const auto& sc = entity.GetComponent<ScriptComponent>();
         if (ScriptEngine::EntityClassExists(sc.ClassName))
         {
+            UUID entityID = entity.GetUUID();
+
             Ref<ScriptInstance> instance = CreateRef<ScriptInstance>(s_Data->EntityClasses[sc.ClassName], entity);
-            s_Data->EntityInstances[entity.GetUUID()] = instance;
+            s_Data->EntityInstances[entityID] = instance;
+
+            // Copy field values
+            if (s_Data->EntityScriptFields.find(entityID) != s_Data->EntityScriptFields.end())
+            {
+                const ScriptFieldMap& fieldMap = s_Data->EntityScriptFields.at(entityID);
+                for (const auto& [name, fieldInstance] : fieldMap)
+                    instance->SetFieldValueInternal(name, fieldInstance.m_Buffer);
+            }
+
             instance->InvokeOnCreate();
         }
     }
@@ -315,6 +328,14 @@ namespace Hazel
         return it->second;
     }
 
+    Ref<ScriptClass> ScriptEngine::GetEntityClass(const std::string& name)
+    {
+        if (s_Data->EntityClasses.find(name) == s_Data->EntityClasses.end())
+            return nullptr;
+
+        return s_Data->EntityClasses.at(name);
+    }
+
     void ScriptEngine::OnRuntimeStop()
     {
         s_Data->SceneContext = nullptr;
@@ -325,6 +346,14 @@ namespace Hazel
     std::unordered_map<std::string, Ref<ScriptClass>> ScriptEngine::GetEntityClasses()
     {
         return s_Data->EntityClasses;
+    }
+
+    ScriptFieldMap& ScriptEngine::GetScriptFieldMap(Entity entity)
+    {
+        HZ_CORE_ASSERT(entity);
+
+        UUID entityID = entity.GetUUID();
+        return s_Data->EntityScriptFields[entityID];
     }
 
     void ScriptEngine::LoadAssemblyClasses()
@@ -358,7 +387,7 @@ namespace Hazel
             if (!isEntity)
                 continue;
 
-            Ref<ScriptClass> scriptClass =CreateRef<ScriptClass>(nameSpace, className);
+            Ref<ScriptClass> scriptClass = CreateRef<ScriptClass>(nameSpace, className);
             s_Data->EntityClasses[fullName] = scriptClass;
 
             // This routine is an iterator routine for retrieving the fields in a class.
@@ -378,7 +407,7 @@ namespace Hazel
                     ScriptFieldType fieldType = Utils::MonoTypeToScriptFieldType(type);
                     HZ_CORE_WARN("  {} ({})", fieldName, Utils::ScriptFieldTypeToString(fieldType));
 
-                    scriptClass->m_Fields[fieldName] = { fieldType, fieldName, field };
+                    scriptClass->m_Fields[fieldName] = {fieldType, fieldName, field};
                 }
             }
         }
@@ -386,7 +415,6 @@ namespace Hazel
         auto& entityClasses = s_Data->EntityClasses;
 
         //mono_field_get_value()
-        
     }
 
     MonoImage* ScriptEngine::GetCoreAssemblyImage()
