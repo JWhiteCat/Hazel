@@ -118,30 +118,6 @@ namespace Hazel
 
             return it->second;
         }
-
-        const char* ScriptFieldTypeToString(ScriptFieldType type)
-        {
-            switch (type)
-            {
-            case ScriptFieldType::Float: return "Float";
-            case ScriptFieldType::Double: return "Double";
-            case ScriptFieldType::Bool: return "Bool";
-            case ScriptFieldType::Char: return "Char";
-            case ScriptFieldType::Byte: return "Byte";
-            case ScriptFieldType::Short: return "Short";
-            case ScriptFieldType::Int: return "Int";
-            case ScriptFieldType::Long: return "Long";
-            case ScriptFieldType::UByte: return "UByte";
-            case ScriptFieldType::UShort: return "UShort";
-            case ScriptFieldType::UInt: return "UInt";
-            case ScriptFieldType::ULong: return "ULong";
-            case ScriptFieldType::Vector2: return "Vector2";
-            case ScriptFieldType::Vector3: return "Vector3";
-            case ScriptFieldType::Vector4: return "Vector4";
-            case ScriptFieldType::Entity: return "Entity";
-            }
-            return "<Invalid>";
-        }
     }
 
     struct ScriptEngineData
@@ -182,8 +158,8 @@ namespace Hazel
 
         // Retrieve and instantiate class
         s_Data->EntityClass = ScriptClass("Hazel", "Entity", true);
-
 #if 0
+	
 		MonoObject* instance = s_Data->EntityClass.Instantiate();
 	
 		// Call method
@@ -256,12 +232,6 @@ namespace Hazel
         // Utils::PrintAssemblyTypes(s_Data->CoreAssembly);
     }
 
-    MonoObject* ScriptEngine::InstantiateClass(MonoClass* monoClass)
-    {
-        MonoObject* instance = mono_object_new(s_Data->AppDomain, monoClass);
-        mono_runtime_object_init(instance);
-        return instance;
-    }
 
     void ScriptEngine::LoadAppAssembly(const std::filesystem::path& filepath)
     {
@@ -328,6 +298,7 @@ namespace Hazel
         return it->second;
     }
 
+
     Ref<ScriptClass> ScriptEngine::GetEntityClass(const std::string& name)
     {
         if (s_Data->EntityClasses.find(name) == s_Data->EntityClasses.end())
@@ -390,6 +361,7 @@ namespace Hazel
             Ref<ScriptClass> scriptClass = CreateRef<ScriptClass>(nameSpace, className);
             s_Data->EntityClasses[fullName] = scriptClass;
 
+
             // This routine is an iterator routine for retrieving the fields in a class.
             // You must pass a gpointer that points to zero and is treated as an opaque handle
             // to iterate over all of the elements. When no more values are available, the return value is NULL.
@@ -420,6 +392,13 @@ namespace Hazel
     MonoImage* ScriptEngine::GetCoreAssemblyImage()
     {
         return s_Data->CoreAssemblyImage;
+    }
+
+    MonoObject* ScriptEngine::InstantiateClass(MonoClass* monoClass)
+    {
+        MonoObject* instance = mono_object_new(s_Data->AppDomain, monoClass);
+        mono_runtime_object_init(instance);
+        return instance;
     }
 
     ScriptClass::ScriptClass(const std::string& classNamespace, const std::string& className, bool isCore)
@@ -475,6 +454,7 @@ namespace Hazel
             m_ScriptClass->InvokeMethod(m_Instance, m_OnUpdateMethod, &param);
         }
     }
+
 
     bool ScriptInstance::GetFieldValueInternal(const std::string& name, void* buffer)
     {
