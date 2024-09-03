@@ -1,3 +1,5 @@
+using System;
+
 namespace Hazel
 {
     public struct Vector2
@@ -26,6 +28,16 @@ namespace Hazel
         public static Vector2 operator *(Vector2 vector, float scalar)
         {
             return new Vector2(vector.X * scalar, vector.Y * scalar);
+        }
+
+        public float LengthSquared()
+        {
+            return X * X + Y * Y;
+        }
+
+        public float Length()
+        {
+            return (float)Math.Sqrt(LengthSquared());
         }
     }
 }
